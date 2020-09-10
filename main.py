@@ -4,7 +4,7 @@ import numpy as np
 xval = np.arange(0, np.pi*4, np.pi*4/50)
 yval = np.cos(xval)
 
-#print(xval, yval)
+print(xval, yval)
 
 figure, ax = plt.subplots()
 ax.scatter(xval,yval)
