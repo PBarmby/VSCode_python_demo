@@ -46,3 +46,42 @@ help(fahr_to_kelvin)
 # %%
 help(print)
 # %%
+def test_add(a, b):
+    return(a + b)
+# %%
+test_add(2,7)
+# %%
+def test_display(a, b, c = 3):
+    print("a", a, "b", b, "c", c)
+    return    
+
+# %%
+test_display(1,2)
+# %%
+test_display(1,2,c=7)
+# %%
+fahr_to_kelvin("forty-two")
+# %%
+def s(p):
+    a = 0
+    for v in p:
+        a += v
+    m = a / len(p)
+    d = 0
+    for v in p:
+        d += (v - m) * (v - m)
+    return numpy.sqrt(d / (len(p) - 1))
+# %%
+def std_dev(sample):
+    sample_sum = 0
+    for value in sample:
+        sample_sum += value
+
+    sample_mean = sample_sum / len(sample)
+
+    sum_squared_devs = 0
+    for value in sample:
+        sum_squared_devs += (value - sample_mean) * (value - sample_mean)
+
+    return numpy.sqrt(sum_squared_devs / (len(sample) - 1))
+# %%
