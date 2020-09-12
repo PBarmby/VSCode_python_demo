@@ -22,3 +22,17 @@ print(freeze)
 # %%
 print('Boiling point:', fahr_to_celsius(212), "C")
 # %%
+def celsius_to_kelvin(temp_c):
+    return(temp_c + 273.15)
+# %%
+celsius_to_kelvin(100)
+# %%
+def fahr_to_kelvin(temp_f):
+    temp_c = fahr_to_celsius(temp_f)
+    temp_k = celsius_to_kelvin(temp_c)
+    return(temp_k)
+# %%
+fahr_to_kelvin(212)
+# %%
+fahr_to_kelvin(32)
+# %%
