@@ -28,6 +28,12 @@ def celsius_to_kelvin(temp_c):
 celsius_to_kelvin(100)
 # %%
 def fahr_to_kelvin(temp_f):
+    """Returns the conversion from Fahrenheit to Kelvin
+          
+       Usage: 
+       fahr_to_kelvin(212) = 373.15
+
+    """
     temp_c = fahr_to_celsius(temp_f)
     temp_k = celsius_to_kelvin(temp_c)
     return(temp_k)
@@ -35,4 +41,8 @@ def fahr_to_kelvin(temp_f):
 fahr_to_kelvin(212)
 # %%
 fahr_to_kelvin(32)
+# %%
+help(fahr_to_kelvin)
+# %%
+help(print)
 # %%
