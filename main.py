@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 xval = np.arange(0, np.pi*4, np.pi*4/50)
-yval = np.cos(xval)
+yval = np.cos(xval) +3
 
 print(xval, yval)
 
