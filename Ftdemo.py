@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 
 #* Initialize the sine wave time series to be transformed.
-N = input('Enter the number of points: ')
-freq = input('Enter frequency of the sine wave: ')
-phase = input('Enter phase of the sine wave: ')
+N = int(input('Enter the number of points: '))
+freq = float(input('Enter frequency of the sine wave: '))
+phase = float(input('Enter phase of the sine wave: '))
 tau = 1.   # Time increment
 t = np.arange(N)*tau               # t = [0, tau, 2*tau, ... ]
 y = np.empty(N)
@@ -20,7 +20,7 @@ f = np.arange(N)/(N*tau)           # f = [0, 1/(N*tau), ... ]
 #* Compute the transform using desired method: direct summation
 #  or fast Fourier transform (FFT) algorithm.
 yt = np.zeros(N,dtype=complex)
-Method = input('Compute transform by: 1) Direct summation; 2) FFT  :')
+Method = int(input('Compute transform by: 1) Direct summation; 2) FFT  :'))
 
 import time
 startTime = time.time()
@@ -35,7 +35,7 @@ else:                        # Fast Fourier transform
 
 stopTime = time.time()
 
-print 'Elapsed time = ', stopTime - startTime, ' seconds'
+print('Elapsed time = {:.3e} seconds'.format(stopTime - startTime))
 
 
 #* Graph the time series and its transform.
