@@ -1,4 +1,5 @@
 # ftdemo - Discrete Fourier transform demonstration program
+# updated to be compatible with Python3, 20201026 - PB
 
 # Set up configuration options and special features
 import numpy as np
