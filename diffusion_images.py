@@ -25,13 +25,14 @@ def T_analy(x, t, L=1):
         Tsum += (-1)**n * tg(x + n*L, t)
     return(Tsum)
 
-# reproducing Figure 6.6, bottom panel
-L = 1
-xpts = np.arange(-1.5*L, 1.5*L, step=0.1)
-T1 = T_analy(xpts, 0.03)
+def main():
+    # reproducing Figure 6.6, bottom panel
+    L = 1
+    xpts = np.arange(-1.5*L, 1.5*L, step=0.1)
+    T1 = T_analy(xpts, 0.03)
 
-fig,ax = plt.subplots()
-ax.plot(xpts, T1)
-ax.set_xlabel('x/L')
-ax.set_ylabel('T(x,t)')
-plt.show()
+    fig,ax = plt.subplots()
+    ax.plot(xpts, T1)
+    ax.set_xlabel('x/L')
+    ax.set_ylabel('T(x,t)')
+    plt.show()
