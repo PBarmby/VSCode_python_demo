@@ -33,7 +33,7 @@ plot_step = nstep/nplots         # Number of time steps between plots
 
 
 #* Loop over the desired number of time steps.
-ttplot = np.empty((N,nplots))
+ttdiff_plot = np.empty((N,nplots))
 tplot = np.empty(nplots)
 for istep in range(nstep):  ## MAIN LOOP ##
     
@@ -45,11 +45,11 @@ for istep in range(nstep):  ## MAIN LOOP ##
     # L and kappa already set to 1 above so no need to set here
     # compute time
     t = tau*istep
-    Ta = di.T_analy(xplots, t)
+    tt_a = di.T_analy(xplot, t)
 
     #* Periodically record temperature difference for plotting.
     if (istep+1) % plot_step < 1 :         # Every plot_step steps
-        ttdiff_plot[:,iplot] = ta - np.copy(tt) # record ta - tt(i) for plotting
+        ttdiff_plot[:,iplot] = tt_a - np.copy(tt) # record tt_a - tt(i) for plotting
         tplot[iplot] = (istep+1)*tau       # Record time for plots
         iplot += 1
 
