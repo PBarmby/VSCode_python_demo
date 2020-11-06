@@ -45,11 +45,13 @@ for istep in range(nstep):  ## MAIN LOOP ##
     # L and kappa already set to 1 above so no need to set here
     # compute time
     t = tau*istep
-    tt_a = di.T_analy(xplot, t)
+    if t > 0:
+        tt_a = di.T_analy(xplot, t)
 
     #* Periodically record temperature difference for plotting.
-    if (istep+1) % plot_step < 1 :         # Every plot_step steps
+    if (istep+2) % plot_step < 1 :         # Every plot_step steps
         ttdiff_plot[:,iplot] = tt_a - np.copy(tt) # record tt_a - tt(i) for plotting
+        print(ttdiff_plot[:,iplot].sum())
         tplot[iplot] = (istep+1)*tau       # Record time for plots
         iplot += 1
 
@@ -67,4 +69,13 @@ ax.set_xlabel('Time')
 ax.set_ylabel('x')
 ax.set_zlabel(r'$|T_a(x,t)-T_c(x,t)|$')
 ax.set_title('Analytic - computed T')
+plt.show()
+
+fig, ax = plt.subplots()
+for i in range(0, iplot, 5):
+    labstr = 't = {0:.2e}'.format(tplot[i])
+    ax.plot(xplot, ttdiff_plot[:,i], label=labstr)
+ax.set_xlabel('x')
+ax.set_ylabel(r'$|T_a(x,t)-T_c(x,t)|$')
+ax.legend()
 plt.show()
