@@ -14,9 +14,9 @@ h = L/(N-1)   # Grid size
 kappa = 1.    # Diffusion coefficient
 coeff = kappa*tau/h**2
 if coeff < 0.5 :
-    print 'Solution is expected to be stable'
+    print('Solution is expected to be stable')
 else:
-    print 'WARNING: Solution is expected to be unstable'
+    print('WARNING: Solution is expected to be unstable')
 
 
 #* Set initial and boundary conditions.
