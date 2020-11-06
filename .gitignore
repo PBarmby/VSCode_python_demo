@@ -1,2 +1,5 @@
 .ipynb_checkpoints/
 .vscode/
+_pycache_/
+*.pyc
+*.json
