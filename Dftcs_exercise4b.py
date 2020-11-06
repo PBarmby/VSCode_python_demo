@@ -50,7 +50,7 @@ for istep in range(nstep):  ## MAIN LOOP ##
 
     #* Periodically record temperature difference for plotting.
     if (istep+2) % plot_step < 1 :         # Every plot_step steps
-        ttdiff_plot[:,iplot] = tt_a - np.copy(tt) # record tt_a - tt(i) for plotting
+        ttdiff_plot[:,iplot] = np.abs(tt_a - np.copy(tt)) # record tt_a - tt(i) for plotting
         print(ttdiff_plot[:,iplot].sum())
         tplot[iplot] = (istep+1)*tau       # Record time for plots
         iplot += 1
