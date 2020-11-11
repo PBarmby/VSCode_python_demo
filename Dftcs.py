@@ -1,5 +1,6 @@
 # dftcs - Program to solve the diffusion equation 
 # using the Forward Time Centered Space (FTCS) scheme.
+# updated for compatibility with Python 3: P Barmby, 20201106
 
 # Set up configuration options and special features
 import numpy as np
