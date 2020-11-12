@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 #* Select numerical parameters (time step, grid spacing, etc.).
-method = int(input('Choose a numerical method, 1) FTCS; 2) Lax; 3) Lax-Wendroff :'))
+method = int(input('Choose a numerical method, 1) FTCS; 2) Lax; 3) Lax-Wendroff; 4) upwind :'))
 N = int(input('Enter number of grid points: '))
 L = 1.      # System size
 h = L/N     # Grid spacing
@@ -51,9 +51,11 @@ for iStep in range(nStep):  ## MAIN LOOP ##
         a[:] = a[:] + coeff*( a[ip] - a[im] )  
     elif  method == 2 :   ### Lax method ###
         a[:] = .5*( a[ip] + a[im] ) + coeff*( a[ip] - a[im] )   
-    else:                 ### Lax-Wendroff method ###
+    elif method == 3:     ### Lax-Wendroff method ###
         a[:] = ( a[:] + coeff*( a[ip] - a[im] ) + 
                 coefflw*( a[ip] + a[im] -2*a[:] ) )
+    else:                 ### upwind method
+        a[:] = a[:] + 2*coeff*( a[:] - a[im] )
 
     #* Periodically record a(t) for plotting.
     if (iStep+1) % plotStep < 1 :        # Every plot_iter steps record 
