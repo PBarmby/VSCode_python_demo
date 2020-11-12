@@ -1,5 +1,6 @@
 # advect - Program to solve the advection equation 
 # using the various hyperbolic PDE schemes
+# updated for Python 3 and to add upwind scheme - PB
 
 # Set up configuration options and special features
 import numpy as np
