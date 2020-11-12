@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 
 
 #* Select numerical parameters (time step, grid spacing, etc.).
-method = input('Choose a numerical method, 1) FTCS; 2) Lax; 3) Lax-Wendroff :')
-N = input('Enter number of grid points: ')
+method = int(input('Choose a numerical method, 1) FTCS; 2) Lax; 3) Lax-Wendroff :'))
+N = int(input('Enter number of grid points: '))
 L = 1.      # System size
 h = L/N     # Grid spacing
 c = 1.      # Wave speed
-print 'Time for wave to move one grid spacing is ', h/c 
-tau = input('Enter time step: ')
+print('Time for wave to move one grid spacing is ', h/c) 
+tau = float(input('Enter time step: '))
 coeff = -c*tau/(2.*h)    # Coefficient used by all schemes
 coefflw = 2*coeff**2     # Coefficient used by L-W scheme
-print 'Wave circles system in ', L/(c*tau), ' steps' 
-nStep = input('Enter number of steps: ')
+print('Wave circles system in ', L/(c*tau), ' steps') 
+nStep = int(input('Enter number of steps: '))
 
 #* Set initial and boundary conditions.
 sigma = 0.1                  # Width of the Gaussian pulse
@@ -60,7 +60,7 @@ for iStep in range(nStep):  ## MAIN LOOP ##
         aplot[:,iplot] = np.copy(a)      # Record a(i) for ploting
         tplot[iplot] = tau*(iStep+1)
         iplot += 1
-        print iStep, ' out of ', nStep, ' steps completed'
+        print(iStep, ' out of ', nStep, ' steps completed')
 
 
 #* Plot the initial and final states.
