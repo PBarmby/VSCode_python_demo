@@ -141,6 +141,9 @@ tt_mtx_explicit = diffusion_ftcs_mtx(61, 300, trel, implicit=False)
 diff = np.abs(tt_mtx_implicit-tt_mtx_explicit)
 
 # %%
+diff2 = np.abs(tt-tt_mtx_explicit)
+print(diff2.sum()) 
+# %%
 doplot(xplot,tplot, tt_mtx_implicit, 'mesh')
 doplot(xplot,tplot, tt_mtx_explicit, 'mesh')
 
@@ -151,12 +154,75 @@ doplot(xplot,tplot, tt_mtx_explicit, 'contour')
 
 
 # %%
-plt.imshow(diff[:,1:5])
-#print(diff[0,:])
+plt.imshow(diff[20:40,0:10])
+
 
 
 # %%
 np.where(diff>1)
 # %%
 diff[np.where(diff>1)]
+# %%
+def diffusion_ftcs_mtx_v2(nspace, ntime, tau_rel, scheme='crank', args = [1.0, 1.0]):
+    """ 
+        Compute the solution to the diffusion equation using 
+            the forward-time, centered-space algorithm 
+            in matrix formulation
+        nspace: number of spatial grid points
+        ntime: number of time grid points
+        tau_rel: timestep in units of t_sigma=h**2/kappa
+        scheme: 'implicit', 'explicit', 'crank'
+        args: list containing L and kappa
+        
+        output: tt(nspace, ntime): 2D ndarray containing T(x,t)
+        
+    """
+    if tau_rel < 1.0 :
+        print('Solution is expected to be stable')
+    else:
+        print('WARNING: Solution is expected to be unstable')
+        
+    L = args[0] # The system extends from x=-L/2 to x=L/2
+    kappa = args[1] # Diffusion coefficient
+    h = L/(nspace-1)   # Grid size
+    t_sigma = h**2/(2*kappa) # critical time step
+    tau = tau_rel * t_sigma
+    coeff = kappa*tau/h**2
+
+    #* Set initial and boundary conditions.
+    tt = np.zeros((nspace, ntime))    # Initialize T to zero at all points
+    tt[int(nspace/2),0] = 1./h        # IC: delta function in center
+
+    # construct matrix D, NM4P p222
+    D = -2*np.identity(nspace) +np.diagflat(np.ones(nspace-1),1) +np.diagflat(np.ones(nspace-1),-1)
+    # boundary conditions
+    D[0] = 0 
+    D[-1] = 0
+    
+    if scheme == 'implicit':
+        A = np.linalg.inv(np.identity(nspace) - coeff*D)
+    elif scheme== 'explicit': # explicit FTCS 
+        A = np.identity(nspace) + coeff*D 
+    elif scheme == 'crank': 
+        A = np.matmul(np.linalg.inv(np.identity(nspace) - coeff*D),
+            np.identity(nspace) + coeff*D)
+
+    ## MAIN LOOP: note it starts at 1, not zero: istep = 0 is the IC 
+    for istep in range(1, ntime):  
+        #* Compute new temperature using FTCS scheme.
+        tt[:, istep]  = A.dot(tt[:,istep-1])        
+    return(tt)
+
+# %%
+tt_mtx_cn = diffusion_ftcs_mtx_v2(61, 300, trel, scheme='crank')
+diff = np.abs(tt_mtx_implicit-tt_mtx_cn)
+# %%
+print(diff.sum())
+# %%
+doplot(xplot,tplot, tt_mtx_implicit, 'contour')
+doplot(xplot,tplot, tt_mtx_explicit, 'contour')
+doplot(xplot,tplot, tt_mtx_cn, 'contour')
+
+# %%
+plt.imshow(diff[20:40,0:50])
 # %%
