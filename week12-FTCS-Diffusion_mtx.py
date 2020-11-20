@@ -1,18 +1,21 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 
-
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
-# Adaptation of the `dftcs` program from the textbook into a function that will integrate the 1D diffusion equation in the FTCS approximation forward in time.
+# Adaptation of the `dftcs` program from the textbook 
+# into a function that will integrate the 1D diffusion 
+# equation in the FTCS approximation forward in time.
 
 # %%
 def diffusion_ftcs(nspace, ntime, tau_rel, args = [1.0, 1.0]):
     """ 
-        Compute the solution to the diffusion equation using the forward-time, centered-space algorithm
+        Compute the solution to the diffusion equation using 
+          the forward-time, centered-space algorithm
         nspace: number of spatial grid points
         ntime: number of time grid points
         tau_rel: timestep in units of t_sigma=h**2/kappa
@@ -34,8 +37,8 @@ def diffusion_ftcs(nspace, ntime, tau_rel, args = [1.0, 1.0]):
     coeff = kappa*tau/h**2
 
     #* Set initial and boundary conditions.
-    tt = np.zeros((nspace, ntime))    # Initialize temperature to zero at all points
-    tt[int(nspace/2),0] = 1./h             # Initial cond. is delta function in center
+    tt = np.zeros((nspace, ntime))    # Initialize T to zero at all points
+    tt[int(nspace/2),0] = 1./h        # IC: delta function in center
     ## The boundary conditions are tt[0,:] = tt[N-1, :] = 0
 
     for istep in range(1, ntime):  ## MAIN LOOP ##
@@ -49,15 +52,20 @@ def diffusion_ftcs(nspace, ntime, tau_rel, args = [1.0, 1.0]):
 # %% [markdown]
 # ### Part 2
 # 
-# Adaptation of the above function into a version that uses the matrix formulation.
+# Adaptation of the above function into a version that 
+# uses the matrix formulation.
 
 # %%
 def diffusion_ftcs_mtx(nspace, ntime, tau_rel, implicit=True, args = [1.0, 1.0]):
     """ 
-        Compute the solution to the diffusion equation using the forward-time, centered-space algorithm in matrix formulation
+        Compute the solution to the diffusion equation using 
+            the forward-time, centered-space algorithm 
+            in matrix formulation
         nspace: number of spatial grid points
         ntime: number of time grid points
         tau_rel: timestep in units of t_sigma=h**2/kappa
+        implicit: use the implicit formulation (True) or
+                      the explicit formulation (False)
         args: list containing L and kappa
         
         output: tt(nspace, ntime): 2D ndarray containing T(x,t)
@@ -76,11 +84,11 @@ def diffusion_ftcs_mtx(nspace, ntime, tau_rel, implicit=True, args = [1.0, 1.0])
     coeff = kappa*tau/h**2
 
     #* Set initial and boundary conditions.
-    tt = np.zeros((nspace, ntime))    # Initialize temperature to zero at all points
-    tt[int(nspace/2),0] = 1./h             # Initial cond. is delta function in center
+    tt = np.zeros((nspace, ntime))    # Initialize T to zero at all points
+    tt[int(nspace/2),0] = 1./h        # IC: delta function in center
 
     # construct matrix D, NM4P p222
-    D = -2*np.identity(nspace)+np.diagflat(np.ones(nspace-1),1)+np.diagflat(np.ones(nspace-1),-1)
+    D = -2*np.identity(nspace) +np.diagflat(np.ones(nspace-1),1) +np.diagflat(np.ones(nspace-1),-1)
     # boundary conditions
     D[0] = 0 
     D[-1] = 0
@@ -89,8 +97,9 @@ def diffusion_ftcs_mtx(nspace, ntime, tau_rel, implicit=True, args = [1.0, 1.0])
         A = np.linalg.inv(np.identity(nspace) - coeff*D)
     else: # explicit FTCS 
         A = np.identity(nspace) + coeff*D 
-    
-    for istep in range(1, ntime):  ## MAIN LOOP: note it starts at 1, not zero: istep = 0 is the IC #
+
+    ## MAIN LOOP: note it starts at 1, not zero: istep = 0 is the IC 
+    for istep in range(1, ntime):  
         #* Compute new temperature using FTCS scheme.
         tt[:, istep]  = A.dot(tt[:,istep-1])        
     return(tt)
@@ -103,14 +112,6 @@ tsig = h**2/(2) # compute t_sigma
 trel = 1e-4/tsig # compute trel
 xplot = np.arange(61)*h - 0.5
 tplot = np.arange(300)*(trel*tsig) 
-
-# %%
-tt = diffusion_ftcs(61, 300, trel)
-tt_mtx = diffusion_ftcs_mtx(61, 300, trel)
-
-# %%
-print(np.abs(tt-tt_mtx).sum())
-
 
 # %%
 def doplot(xplot, tplot, tt, ptype):
@@ -133,18 +134,29 @@ def doplot(xplot, tplot, tt, ptype):
     plt.show()
     return
 
+# %%
+tt = diffusion_ftcs(61, 300, trel)
+tt_mtx_implicit = diffusion_ftcs_mtx(61, 300, trel, implicit=True)
+tt_mtx_explicit = diffusion_ftcs_mtx(61, 300, trel, implicit=False)
+diff = np.abs(tt_mtx_implicit-tt_mtx_explicit)
 
 # %%
-doplot(xplot,tplot, tt, 'mesh')
-doplot(xplot,tplot, tt_mtx, 'mesh')
+doplot(xplot,tplot, tt_mtx_implicit, 'mesh')
+doplot(xplot,tplot, tt_mtx_explicit, 'mesh')
 
 
 # %%
-doplot(xplot,tplot, tt, 'contour')
-doplot(xplot,tplot, tt_mtx, 'contour')
+doplot(xplot,tplot, tt_mtx_implicit, 'contour')
+doplot(xplot,tplot, tt_mtx_explicit, 'contour')
 
 
 # %%
+plt.imshow(diff[:,1:5])
+#print(diff[0,:])
 
 
-
+# %%
+np.where(diff>1)
+# %%
+diff[np.where(diff>1)]
+# %%
